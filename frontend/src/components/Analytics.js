@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useCallback} from 'react';
 import { api } from '../services/api';
 import LoadingSpinner from './LoadingSpinner';
 import Toast from './Toast';
@@ -11,24 +11,25 @@ function Analytics({ portfolioId }) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
+
+  const fetchAnalytics = useCallback(async () => {
+  try {
+    setError(null);
+    setLoading(true);
+    const response = await api.getAnalytics(portfolioId);
+    setAnalytics(response.data);
+    setLoading(false);
+  } catch (e) { 
+    console.error(e); 
+    setError('Failed to load analytics');
+    setToast({ message: 'Unable to fetch analytics', type: 'error' });
+    setLoading(false);
+  }
+}, [portfolioId]);
+
+useEffect(() => {
     fetchAnalytics();
 },  [fetchAnalytics]);
-
-  const fetchAnalytics = async () => {
-    try {
-      setError(null);
-      setLoading(true);
-      const response = await api.getAnalytics(portfolioId);
-      setAnalytics(response.data);
-      setLoading(false);
-    } catch (e) { 
-      console.error(e); 
-      setError('Failed to load analytics');
-      setToast({ message: 'Unable to fetch analytics', type: 'error' });
-      setLoading(false);
-    }
-  };
 
   if (loading) return <LoadingSpinner message="Loading analytics..." />;
   

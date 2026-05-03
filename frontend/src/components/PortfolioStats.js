@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useCallback} from 'react';
 import { api } from '../services/api';
 import LoadingSpinner from './LoadingSpinner';
 import Toast from './Toast';
@@ -10,26 +10,27 @@ function PortfolioStats({ portfolioId }) {
   const [toast, setToast] = useState(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  const fetchStats = useCallback(async () => {
+  try {
+    setError(null);
+    const response = await api.getPortfolioStats(portfolioId);
+    setStats(response.data);
+    setLoading(false);
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    setError(error.response?.data?.detail || 'Failed to load portfolio stats');
+    setToast({ 
+      message: 'Unable to fetch portfolio data', 
+      type: 'error' 
+    });
+    setLoading(false);
+  }
+}, [portfolioId]);
+
   useEffect(() => {
     fetchStats();
 },  [fetchStats]);
-
-  const fetchStats = async () => {
-    try {
-      setError(null);
-      const response = await api.getPortfolioStats(portfolioId);
-      setStats(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-      setError(error.response?.data?.detail || 'Failed to load portfolio stats');
-      setToast({ 
-        message: 'Unable to fetch portfolio data', 
-        type: 'error' 
-      });
-      setLoading(false);
-    }
-  };
 
   if (loading) return <LoadingSpinner message="Loading portfolio stats..." />;
   
