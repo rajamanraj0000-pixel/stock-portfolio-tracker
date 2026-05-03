@@ -12,9 +12,7 @@ function PortfolioStats({ portfolioId }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchStats();
-    const interval = setInterval(fetchStats, 30000);
-    return () => clearInterval(interval);
-  }, [portfolioId]);
+},  [fetchStats]);
 
   const fetchStats = async () => {
     try {

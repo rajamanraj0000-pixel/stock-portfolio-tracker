@@ -9,7 +9,6 @@ function PaperTrading() {
   const [toast, setToast] = useState(null);
 
   // ✅ FIX ADDED HERE
-  const [fetchError, setFetchError] = useState(null);
 
   const [formData, setFormData] = useState({
     symbol: '',
@@ -26,7 +25,6 @@ function PaperTrading() {
 
   const fetchPortfolio = async () => {
     try {
-      setFetchError(null);
       const response = await api.getPaperPortfolio(1);
       setPortfolio(response.data);
     } catch (error) {

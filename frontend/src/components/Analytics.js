@@ -13,7 +13,7 @@ function Analytics({ portfolioId }) {
 
   useEffect(() => {
     fetchAnalytics();
-  }, [portfolioId]);
+},  [fetchAnalytics]);
 
   const fetchAnalytics = async () => {
     try {
