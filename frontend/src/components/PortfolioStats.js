@@ -9,6 +9,7 @@ function PortfolioStats({ portfolioId }) {
   const [error, setError] = useState(null);
   const [toast, setToast] = useState(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchStats();
     const interval = setInterval(fetchStats, 30000);

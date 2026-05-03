@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
-import LoadingSpinner from './LoadingSpinner';
 import Toast from './Toast';
 
 function Alerts() {

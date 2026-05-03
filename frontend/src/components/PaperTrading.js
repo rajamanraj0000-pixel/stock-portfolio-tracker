@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
-import LoadingSpinner from './LoadingSpinner';
 import Toast from './Toast';
 
 function PaperTrading() {
@@ -8,7 +7,6 @@ function PaperTrading() {
   const [trades, setTrades] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
-  const [fetchError, setFetchError] = useState(null);
   const [formData, setFormData] = useState({
     symbol: '',
     trade_type: 'buy',

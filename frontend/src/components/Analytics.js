@@ -9,6 +9,8 @@ function Analytics({ portfolioId }) {
   const [error, setError] = useState(null);
   const [toast, setToast] = useState(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     fetchAnalytics();
   }, [portfolioId]);
