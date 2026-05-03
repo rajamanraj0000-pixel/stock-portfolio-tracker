@@ -26,8 +26,7 @@ function PaperTrading() {
       const response = await api.getPaperPortfolio(1);
       setPortfolio(response.data);
     } catch (error) {
-      console.error('Error fetching portfolio:', error);
-      setFetchError('Unable to load portfolio data');
+      console.error(error);
       setToast({ message: 'Failed to load portfolio', type: 'error' });
     }
   };
