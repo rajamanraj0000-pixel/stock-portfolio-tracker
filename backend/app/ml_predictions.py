@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import yfinance as yf
+from .yf_helper import get_ticker, get_history
 from datetime import datetime, timedelta
 from sklearn.preprocessing import MinMaxScaler
 from typing import Dict, List
@@ -52,8 +52,9 @@ def predict_stock_price_lstm(symbol: str, days_ahead: int = 30) -> Dict:
     
     try:
         # Fetch historical data (2 years)
-        stock = yf.Ticker(symbol)
-        hist = stock.history(period="2y")
+        hist = get_history(symbol, period="2y")
+        if hist is None:
+            hist = __import__('pandas').DataFrame()
         
         if hist.empty or len(hist) < 100:
             return {
@@ -146,8 +147,9 @@ def predict_stock_price_lstm(symbol: str, days_ahead: int = 30) -> Dict:
 def get_simple_trend_prediction(symbol: str, days_ahead: int = 30) -> Dict:
     """Simple trend-based prediction (fallback if LSTM fails)"""
     try:
-        stock = yf.Ticker(symbol)
-        hist = stock.history(period="3mo")
+        hist = get_history(symbol, period="3mo")
+        if hist is None:
+            hist = __import__('pandas').DataFrame()
         
         if hist.empty:
             return {"error": "No data available"}

@@ -1,13 +1,19 @@
-import yfinance as yf
 from sqlalchemy.orm import Session
 from typing import Dict, List
 from .models import PaperTrade
 from datetime import datetime
-from .stock_cache import get_current_price_cached
+from .yf_helper import get_ticker
 
 def get_current_price(symbol: str) -> float:
-    """Get current stock price using cache"""
-    return get_current_price_cached(symbol)
+    """Get current stock price directly via yfinance with headers"""
+    try:
+        ticker = get_ticker(symbol)
+        hist = ticker.history(period="1d")
+        if not hist.empty:
+            return float(hist['Close'].iloc[-1])
+        return 0
+    except Exception:
+        return 0
 
 def get_paper_portfolio_stats(db: Session, user_id: int) -> Dict:
     """Calculate paper trading portfolio statistics"""

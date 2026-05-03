@@ -1,4 +1,4 @@
-import yfinance as yf
+from .yf_helper import get_ticker
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
@@ -23,7 +23,7 @@ def backtest_strategy(
     
     try:
         # Fetch historical data
-        stock = yf.Ticker(symbol)
+        stock = get_ticker(symbol)
         hist = stock.history(start=start_date, end=end_date)
         
         if hist.empty:
