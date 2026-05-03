@@ -22,12 +22,11 @@ def backtest_strategy(
     """
     
     try:
-        # Fetch historical data
-        stock = get_ticker(symbol)
-        hist = stock.history(start=start_date, end=end_date)
-        
-        if hist.empty:
-            return {"error": "No historical data available"}
+        from .yf_helper import get_history_range
+        hist = get_history_range(symbol, start_date, end_date)
+
+        if hist is None or hist.empty:
+            return {"error": f"No historical data for {symbol} in selected date range"}
         
         # Apply strategy with appropriate parameters
         if strategy == "sma_crossover":

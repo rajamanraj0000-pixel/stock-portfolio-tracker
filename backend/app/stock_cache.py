@@ -71,35 +71,26 @@ def get_current_price_cached(symbol: str, ttl: int = DEFAULT_TTL) -> float:
     try:
         stock = get_ticker(symbol)
 
-        # Fast method first
         try:
-            fast_info = stock.fast_info
-            price = fast_info.get("lastPrice", 0) or fast_info.get("last_price", 0)
-        except:
+            price = float(stock.fast_info.last_price or 0)
+        except Exception:
             price = 0.0
 
-        # Fallback to info
         if not price:
             try:
-                info = stock.info
-                price = (
-                    info.get("currentPrice", 0)
-                    or info.get("regularMarketPrice", 0)
-                    or info.get("previousClose", 0)
-                )
-            except:
+                from .yf_helper import get_history
+                hist = get_history(symbol, period="1d")
+                if hist is not None and not hist.empty:
+                    price = float(hist['Close'].iloc[-1])
+            except Exception:
                 price = 0.0
-
-        price = float(price) if price else 0.0
 
         if price > 0:
             _set_cached(key, price)
-
         return price
 
-    except:
+    except Exception:
         return 0.0
-
 
 def get_stock_info_cached(symbol: str, ttl: int = DEFAULT_TTL) -> Dict:
     """Get stock info with cache"""
