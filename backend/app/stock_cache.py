@@ -1,7 +1,7 @@
 import time
 import re
 import threading
-import yfinance as yf
+from .yf_helper import get_ticker
 from typing import Dict, Any
 
 # Simple in-memory cache
@@ -69,7 +69,7 @@ def get_current_price_cached(symbol: str, ttl: int = DEFAULT_TTL) -> float:
     price = 0.0
 
     try:
-        stock = yf.Ticker(symbol)
+        stock = get_ticker(symbol)
 
         # Fast method first
         try:
@@ -115,7 +115,7 @@ def get_stock_info_cached(symbol: str, ttl: int = DEFAULT_TTL) -> Dict:
         return cached_info
 
     try:
-        stock = yf.Ticker(symbol)
+        stock = get_ticker(symbol)
         info = stock.info or {}
 
         current_price = get_current_price_cached(symbol, ttl)
