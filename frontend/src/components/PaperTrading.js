@@ -7,6 +7,10 @@ function PaperTrading() {
   const [trades, setTrades] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+
+  // ✅ FIX ADDED HERE
+  const [fetchError, setFetchError] = useState(null);
+
   const [formData, setFormData] = useState({
     symbol: '',
     trade_type: 'buy',
